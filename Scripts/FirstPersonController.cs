@@ -53,6 +53,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
 		private Rigidbody rb;
 		private int count;
         public GameObject Trappe;
+        public AudioClip AudioTrappe;
+        public AudioClip soundWater;
+        public RawImage winImage;
 
 
         // Use this for initialization
@@ -73,6 +76,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			count = 0;
 			SetCountText ();
 			winText.text = "";
+            winImage.enabled = false;
         }
 
 
@@ -151,6 +155,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             m_MouseLook.UpdateCursorLock();
         }
+
+
 
 
         private void PlayJumpSound()
@@ -292,15 +298,19 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 		void SetCountText ()
 		{
+            AudioSource audio = GetComponent<AudioSource>();
             countText.text = "Gathered " + count.ToString () + "/5 artefacts";
 			if (count >= 5)
 			{
-				winText.text = "You won! Or did you? ¯\\_(ツ)_/¯";
-			}
+                winImage.enabled = true;
+                winText.text = "You won! Or did you? ¯\\_(ツ)_/¯";
+            }
 
-            if (count >= 1)
+            if (count == 4)
             {
                 Trappe = GameObject.FindWithTag("Trappe");
+                audio.clip = AudioTrappe;
+                audio.Play();
                 Trappe.gameObject.SetActive(false);
             }
         }
